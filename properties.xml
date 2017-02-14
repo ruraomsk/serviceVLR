@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <format maxRecords="2147483647">
+        <fields>
+            <field description="Имя сервера" name="name" type="S">
+                <defaultValue>ruraWin</defaultValue>
+            </field>
+            <field description="URL сервера" name="url" type="S">
+                <defaultValue>jdbc:postgresql://192.168.1.30:5432/vlrbase</defaultValue>
+            </field>
+            <field description="Пользователь" name="user" type="S">
+                <defaultValue>postgres</defaultValue>
+            </field>
+            <field description="Пароль" name="password" type="S">
+                <defaultValue>162747</defaultValue>
+            </field>
+            <field description="Рабочая директория" name="work" type="S">
+                <defaultValue>rura</defaultValue>
+            </field>
+        </fields>
+    </format>
+    <records>
+        <record>
+            <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
+        </record>
+        <record>
+            <value name="name">ruraWin1</value>
+            <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
+        </record>
+        <record>
+            <value name="name">ruraWin2</value>
+            <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
+        </record>
+    </records>
+</table>
