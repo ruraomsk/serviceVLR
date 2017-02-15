@@ -147,7 +147,7 @@ public class ServiseVLR {
         makeItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!connect) {
+                if (!connect|ldf==null) {
                     return;
                 }
                 central.removeAll();
@@ -162,7 +162,7 @@ public class ServiseVLR {
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!connect) {
+                if (!connect|ldf==null) {
                     return;
                 }
                 if(ldf==null) return;
