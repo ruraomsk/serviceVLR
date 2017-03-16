@@ -9,13 +9,11 @@ import com.tibbo.aggregate.common.datatable.DataTable;
 import java.awt.BorderLayout;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
-import static java.awt.BorderLayout.WEST;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.Integer.MAX_VALUE;
@@ -53,7 +51,8 @@ public class ServiseVLR {
     static EditDT editTable = null;
     static boolean connect = false;
     static VLRXMLManager vlrManager = null;
-    static LoadDataFiles ldf=null;
+    static LoadDataFiles ldf = null;
+    static LoadXMLFiles ldx = null;
 
     /**
      * @param args the command line arguments
@@ -139,21 +138,32 @@ public class ServiseVLR {
         loadItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ldf=new LoadDataFiles(prop);
+                ldf = new LoadDataFiles(prop);
+                ldx = null;
             }
         });
         loadMenu.add(loadItem);
+        JMenuItem xmlItem = new JMenuItem("Загрузить xml файлы");
+        xmlItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ldx = new LoadXMLFiles(prop);
+                ldf = null;
+            }
+        });
+        loadMenu.add(xmlItem);
         JMenuItem makeItem = new JMenuItem("Посмотреть загруженное описание переменных ВЛР");
         makeItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!connect|ldf==null) {
-                    return;
-                }
                 central.removeAll();
-                frame.setVisible(false);
-                new EditDT(central, ldf.getTable(), false);
-                frame.setVisible(true);
+                if (ldx != null) {
+                    new EditDT(central, ldx.getTable(), false);
+                }
+                if (ldf != null) {
+                    new EditDT(central, ldf.getTable(), false);
+                }
+                central.revalidate();
             }
         });
         loadMenu.add(makeItem);
@@ -162,16 +172,22 @@ public class ServiseVLR {
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!connect|ldf==null) {
+                if (!connect) {
+                    appendMessage("Произведите подключение к БД");
                     return;
                 }
-                if(ldf==null) return;
-                vlrManager.toDB(ldf.getTable());
+                if (ldf != null) {
+                    vlrManager.toDB(ldf.getTable());
+                }
+                if (ldx != null) {
+                    vlrManager.toDB(ldx.getTable());
+                }
+
                 appendMessage("Сохранено в БД");
             }
         });
         loadMenu.add(saveItem);
-        
+
         menu.add(loadMenu);
 
         JMenu setUpMenu = new JMenu("Сервер");
@@ -180,9 +196,8 @@ public class ServiseVLR {
             @Override
             public void actionPerformed(ActionEvent e) {
                 central.removeAll();
-                frame.setVisible(false);
                 editprop = new EditDT(central, prop.getProperties(), false);
-                frame.setVisible(true);
+                central.revalidate();
             }
         });
         setUpMenu.add(setUpItem);
@@ -193,10 +208,11 @@ public class ServiseVLR {
             public void actionPerformed(ActionEvent e) {
                 if (connect) {
                     vlrManager.close();
-                    connect=false;
+                    connect = false;
                 }
                 new ChangeServer(frame);
                 frame.setTitle(titleFrame());
+                central.revalidate();
             }
         });
         setUpMenu.add(choiceItem);
@@ -207,17 +223,16 @@ public class ServiseVLR {
             public void actionPerformed(ActionEvent e) {
                 if (connect) {
                     vlrManager.close();
-                    connect=false;
+                    connect = false;
                 }
                 vlrManager = new VLRXMLManager(prop.getParamSQL());
                 if (!vlrManager.connected) {
                     vlrManager = new VLRXMLManager(prop.getParamSQL(), true);
                 }
                 connect = vlrManager.connected;
-                frame.setVisible(false);
                 frame.setTitle(titleFrame());
-                frame.setVisible(true);
-                appendMessage("Сервер "+prop.getNameServer()+" подключен");
+                central.revalidate();
+                appendMessage("Сервер " + prop.getNameServer() + " подключен");
             }
         });
         setUpMenu.add(connectItem);
@@ -229,10 +244,9 @@ public class ServiseVLR {
                 if (!connect) {
                     return;
                 }
-               central.removeAll();
-                frame.setVisible(false);
+                central.removeAll();
                 new EditDT(central, vlrManager.toTable(VLRXMLManager.emptyTable().getFormat()), false);
-                frame.setVisible(true);
+                central.revalidate();
 
             }
         });

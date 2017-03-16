@@ -21,14 +21,12 @@
     </format>
     <records>
         <record>
+            <value name="name">ruraWinVlr</value>
             <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
         </record>
         <record>
-            <value name="name">ruraWin1</value>
-            <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
-        </record>
-        <record>
-            <value name="name">ruraWin2</value>
+            <value name="name">ruraWinSpaPs</value>
+            <value name="url">jdbc:postgresql://192.168.1.30:5432/spaps</value>
             <value name="work">/home/rura/NetBeansProjects/serviceVLR/data</value>
         </record>
     </records>
